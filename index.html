@@ -8,6 +8,21 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
+    <!-- Custom CSS -->
+    <style>
+        html, body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            color: #E5E5E5;
+            background-color: #1A1A1A;
+            background-position: center;
+            overflow-y: visible !important;
+            overflow-x: hidden;
+        }
+    </style>
+
+    <!-- CryptoJS -->
+    <script type="text/javascript" src="crypto-js-4.1.1/crypto-js.js"></script>
     <title>JavaScript Base64</title>
 </head>
 <body>
@@ -15,33 +30,50 @@
         <h1>Base64 Encoder Tool</h1>
 
         <div class="row g-2">
-            <div class="col-auto">
+            <div class="col-md">
                 <label for="inputString" class="visually-hidden">Text</label>
-                <input type="text" class="form-control" id="inputString" placeholder="Type Here">
+                <input type="text" class="form-control" id="inputString" placeholder="Text Here">
+                <h4>Result:</h4>
+                <p id="txtResult">Sample Result</p>
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary mb-3" onclick="ConvertToBase64()">Convert</button>
+                <button type="submit" class="btn btn-primary mb-3" onclick="base64Encryption()">Encrypt</button>
+            </div>
+            <div class="col-md">
+                <label for="inputEncryptedString" class="visually-hidden">Text</label>
+                <input type="text" class="form-control" id="inputEncryptedString" placeholder="Text Here">
+                <h4>Result:</h4>
+                <p id="txtDecryptedResult">Sample Result</p>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3" onclick="base64Decryption()">Decrypt</button>
             </div>
         </div>
-
-        <h4>Result:</h4>
-        <p id="txtResult">Sample Result</p>
     </div>
-    
-    <script>
-        function base64EncodeUnicode(str) {
-            // Firstly, escape the string using encodeURIComponent to get the UTF-8 encoding of the characters,
-            // Secondly, we convert the percent encodings into raw bytes, and add it to btoa() function.
-            utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-                return String.fromCharCode('0x' + p1);
-            });
 
-            return btoa(utf8Bytes);
+    <script>
+        function base64Encryption() {
+            var txtInput = document.getElementById("inputString").value;
+            document.getElementById("txtResult").innerHTML = encryptString(txtInput);
         }
 
-        function ConvertToBase64() {
-            var txtInput = document.getElementById("inputString").value;
-            document.getElementById("txtResult").innerHTML = base64EncodeUnicode(txtInput);
+        function base64Decryption() {
+            var txtInput = document.getElementById("inputEncryptedString").value;
+            document.getElementById("txtDecryptedResult").innerHTML = decryptString(txtInput).toString(CryptoJS.enc.Utf8);
+        }
+
+        function encryptString(encryptString) {
+            var textString = encryptString;
+            var words = CryptoJS.enc.Utf8.parse(textString);
+            var base64 = CryptoJS.enc.Base64.stringify(words);
+            return base64;
+        }
+
+        function decryptString(encryptedString) {
+            var base64 = encryptedString;
+            var words = CryptoJS.enc.Base64.parse(base64);
+            var textString = CryptoJS.enc.Utf8.stringify(words);
+            return textString;
         }
     </script>
 
