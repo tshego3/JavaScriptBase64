@@ -75,6 +75,14 @@
             var textString = CryptoJS.enc.Utf8.stringify(words);
             return textString;
         }
+
+        let queryParams = new URLSearchParams(window.location.search);
+        let token = queryParams.get("token");
+
+        if (token && token.length > 0) {
+            document.getElementById("inputEncryptedString").value = token; 
+            base64Decryption();
+        }
     </script>
 
     <!-- Optional JavaScript; choose one of the two! -->
